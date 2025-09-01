@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet" />
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -33,4 +34,6 @@
             </main>
         </div>
     </body>
+
+    <script src="{{ asset('build/assets/app.js') }}"></script>
 </html>
