@@ -18,8 +18,8 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        {{-- <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet" /> --}}
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+        <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet" />
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-neutral-100">
@@ -41,7 +41,7 @@
         </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="{{ asset('build/assets/app.js') }}"></script> --}}
+    <script src="{{ asset('build/assets/app.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </html>
