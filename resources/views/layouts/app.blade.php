@@ -36,4 +36,5 @@
     </body>
 
     <script src="{{ asset('build/assets/app.js') }}"></script>
+
 </html>

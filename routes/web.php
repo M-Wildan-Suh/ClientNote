@@ -25,10 +25,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
@@ -44,7 +40,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {return redirect()->route('dashboard');});
+
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/admin/webnote/{id}', [AdminController::class, 'note'])->name('note');
 
     Route::resource('/admin/webnote', WebNoteController::class);
 

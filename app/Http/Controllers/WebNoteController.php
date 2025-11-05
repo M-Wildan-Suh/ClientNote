@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\WebNote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class WebNoteController extends Controller
 {
@@ -18,22 +21,39 @@ class WebNoteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $newnote = new WebNote();
+        $newNote = new WebNote();
 
-        $newnote->domain_name = $request->domain_name;
-        $newnote->description = $request->description;
+        $newNote->title = $request->title;
+        $newNote->description = $request->description;
+        $newNote->no_tlp = $request->no_tlp;
 
-        $newnote->save();
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+            $imageName = time();
+            $imagePath = public_path('storage/images/note/');
+
+            // Pastikan direktori ada, jika tidak maka buat
+            if (!File::exists($imagePath)) {
+                File::makeDirectory($imagePath, 0755, true);
+            }
+
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($imageFile->getPathname());
+
+            $imageFullPath = $imagePath . $imageName . '.webp';
+            $image->save($imageFullPath);
+
+            $newNote->image = $imageName . '.webp';
+        }
+
+        $newNote->save();
 
         return redirect()->back()->with('success', 'Note berhasil ditambahkan');
     }
@@ -61,8 +81,35 @@ class WebNoteController extends Controller
     {
         $webNote = WebNote::find($id);
 
-        $webNote->domain_name = $request->domain_name;
+        $webNote->title = $request->title;
         $webNote->description = $request->description;
+        $webNote->no_tlp = $request->no_tlp;
+
+        if ($request->hasFile('image')) {
+            if ($webNote->image) {
+                $path = public_path('storage/images/note/' . $webNote->image);
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            $imageFile = $request->file('image');
+            $imageName = time();
+            $imagePath = public_path('storage/images/note/');
+
+            // Pastikan direktori ada, jika tidak maka buat
+            if (!File::exists($imagePath)) {
+                File::makeDirectory($imagePath, 0755, true);
+            }
+
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($imageFile->getPathname());
+
+            $imageFullPath = $imagePath . $imageName . '.webp';
+            $image->save($imageFullPath);
+
+            $webNote->image = $imageName . '.webp';
+        }
 
         $webNote->save();
 
@@ -75,8 +122,17 @@ class WebNoteController extends Controller
     public function destroy($id, WebNote $webNote)
     {
         $webNote = WebNote::find($id);
+
+        if ($webNote->image) {
+            $path = public_path('storage/images/note/' . $webNote->image);
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+
         $webNote->delete();
 
-        return redirect()->back()->with('success', 'Note berhasil diedit');
+        return redirect()->back()->with('success', 'Note berhasil Hapus');
     }
 }

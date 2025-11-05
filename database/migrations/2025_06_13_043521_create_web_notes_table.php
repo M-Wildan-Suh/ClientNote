@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('web_notes', function (Blueprint $table) {
             $table->id();
-            $table->string('domain_name');
-            $table->string('description');
+            $table->string('Title');
+            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('no_tlp')->nullable();
+            $table->string('status')->default();
             $table->timestamps();
         });
     }

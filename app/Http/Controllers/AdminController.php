@@ -9,28 +9,20 @@ use Illuminate\Support\Facades\Http;
 class AdminController extends Controller
 {
     public function dashboard(Request $request) {
-        $url = 'http://client.webz.biz/api/domain';
+        $data = WebNote::
+            when($request->cari && $request->cari != 'all', function ($query, $request) {
+                return $query->where('status', 'like', '%' . $request->cari . '%');
+            })
+            ->latest()
+            ->get();
 
-        $response = Http::get($url);
 
-        if ($response->successful()) {
-            $api = $response->object(); // mengubah hasil response jadi object
+        return view('admin.dashboard', compact('data'));
+    }
 
-            // Akses datanya jika perlu
-            $domain = $api;
+    public function note($id) {
+        $data = WebNote::find($id);
 
-            $domainName = $request->nama_domain;
-
-            $data = WebNote::
-                when($request->nama_domain && $request->nama_domain != 'all', function ($query, $domainName) {
-                    return $query->where('domain_name', 'like', '%' . $domainName . '%');
-                })
-                ->latest()
-                ->get();
-
-            return view('admin.dashboard', compact('data', 'domain'));
-        } else {
-            return redirect()->route('notfound');
-        }
+        return view('admin.note', compact('data'));
     }
 }
