@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Http;
 
 class AdminController extends Controller
 {
-    public function dashboard(Request $request) {
-        $data = WebNote::
-            when($request->cari && $request->cari != 'all', function ($query, $request) {
-                return $query->where('status', 'like', '%' . $request->cari . '%');
-            })
+    public function dashboard(Request $request)
+    {
+        $data = WebNote::query()
+            ->when(
+                $request->filled('cari') && $request->cari !== 'all',
+                fn($q) =>
+                $q->where('status', 'like', "%{$request->cari}%")
+            )
             ->latest()
             ->get();
 
@@ -20,7 +23,8 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('data'));
     }
 
-    public function note($id) {
+    public function note($id)
+    {
         $data = WebNote::find($id);
 
         return view('admin.note', compact('data'));
