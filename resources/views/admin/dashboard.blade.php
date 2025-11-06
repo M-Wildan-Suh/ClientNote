@@ -91,19 +91,21 @@
             </div>
             <div class=" w-full">
                 <form action="{{ route('dashboard') }}" method="GET">
-                    <div class=" w-full flex justify-end">
-                        <div class=" flex gap-2 items-center">
+                    <div class="w-full flex justify-end">
+                        <div class="flex gap-2 items-center">
                             <select
-                                class=" text-sm sm:text-base max-w-24 sm:max-w-32 w-auto py-0.5 sm:py-1 focus:border-[#0A2342] focus:ring-[#0A2342] duration-300 rounded-full overflow-hidden"
-                                name="search" id="">
-                                <option value="all">All</option>
-                                <option value="Prospek Baru">Prospek Baru</option>
-                                <option value="Progress">Progress</option>
-                                <option value="Selesai">Selesai</option>
-                                <option value="Cancel">Cancel</option>
+                                class="text-sm sm:text-base max-w-24 sm:max-w-32 w-auto py-0.5 sm:py-1 focus:border-[#0A2342] focus:ring-[#0A2342] duration-300 rounded-full overflow-hidden"
+                                name="cari">
+                                <option value="all" {{ request('cari') == 'all' ? 'selected' : '' }}>All</option>
+                                <option value="Prospek Baru" {{ request('cari') == 'Prospek Baru' ? 'selected' : '' }}>Prospek Baru</option>
+                                <option value="Progress" {{ request('cari') == 'Progress' ? 'selected' : '' }}>Progress</option>
+                                <option value="Selesai" {{ request('cari') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="Cancel" {{ request('cari') == 'Cancel' ? 'selected' : '' }}>Cancel</option>
                             </select>
                             <button
-                                class="w-full px-2 py-0.5 sm:py-1 text-sm sm:text-base rounded-full font-semibold bg-white hover:bg-[#0A2342] hover:text-white text-[#0A2342] border border-[#0A2342] duration-300">Cari</button>
+                                class="w-full px-2 py-0.5 sm:py-1 text-sm sm:text-base rounded-full font-semibold bg-white hover:bg-[#0A2342] hover:text-white text-[#0A2342] border border-[#0A2342] duration-300">
+                                Cari
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -115,7 +117,7 @@
                             class=" flex flex-col w-full h-full overflow-hidden rounded-md bg-white border border-[#0A2342] divide-y divide-[#0A2342] shadow-md shadow-black/20">
                             <div
                                 class=" flex justify-between bg-[#0A2342] text-white text-sm sm:text-lg font-semibold pt-2 px-2 sm:pt-4 sm:px-4 pb-2">
-                                <a href="{{route('note', ['id' => $item->id])}}">{{ $item->title }}</a>
+                                <a href="{{ route('note', ['id' => $item->id]) }}">{{ $item->title }}</a>
                             </div>
                             <div
                                 class=" flex flex-col flex-grow gap-2 justify-between text-xs sm:text-base pt-1 pb-2 px-2 sm:pb-4 sm:px-4">
@@ -173,7 +175,9 @@
                                                         fill="currentColor" />
                                                 </svg>
                                             </button>
-                                            <div x-show="copied" class=" absolute bottom-full mb-1 left-1/2 -translate-x-1/2 text-xs px-2 py-0.5 rounded-full bg-gray-800 text-white">Disalin</div>
+                                            <div x-show="copied"
+                                                class=" absolute bottom-full mb-1 left-1/2 -translate-x-1/2 text-xs px-2 py-0.5 rounded-full bg-gray-800 text-white">
+                                                Disalin</div>
                                         </div>
                                         <a href="https://wa.me/{{ $item->no_tlp }}" target="__blank">
                                             <button @click="modal = !modal" type="button"
